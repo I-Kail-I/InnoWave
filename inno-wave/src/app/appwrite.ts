@@ -1,5 +1,5 @@
 
-import { Client as AppwriteClient, Account, ID } from "appwrite";
+import { Client as AppwriteClient, Account } from "appwrite";
 
 export const client = new AppwriteClient();
 
