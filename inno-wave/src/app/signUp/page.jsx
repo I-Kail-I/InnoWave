@@ -1,74 +1,74 @@
 "use client";
 import { useState } from "react";
-import { account, databases } from "../appwrite.js";
+import { account, databases, ID } from "../appwrite.js";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FaGoogle, FaGithub, FaApple } from "react-icons/fa";
 
-export default function SignIn() {
+export default function SignUp() {
+  const router = useRouter();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const checkUserExists = async (username) => {
-    try {
-      const users = await databases.listDocuments(
-        "your-database-id",
-        "your-collection-id"
-      );
-      return users.documents.some((user) => user.username === username);
-    } catch (e) {
-      console.error("Error checking user:", e);
-      return false;
-    }
-  };
-
-  const handleLogin = async (e) => {
+  const createUser = async (e) => {
     e.preventDefault();
     try {
-      const userExists = await checkUserExists(username);
-      if (!userExists) {
-        setError("User not found. Please sign up first.");
-        return;
-      }
+      // Create user account
+      const userAccount = await account.create(
+        ID.unique(),
+        email,
+        password,
+        username
+      );
 
-      await account.createEmailPasswordSession(username, password);
-      setUsername("");
-      setPassword("");
-      setError("");
+      if (userAccount) {
+        // Store additional user data in database
+        await databases.createDocument(
+          process.env.NEXT_PUBLIC_DATABASE_ID,
+          process.env.NEXT_PUBLIC_COLLECTION_ID,
+          ID.unique(),
+          {
+            userId: userAccount.$id,
+            email: email,
+            username: username,
+            firstName: firstName,
+            lastName: lastName,
+          }
+        );
+
+        // Create session for the new user
+        await account.createEmailSession(email, password);
+
+        // Clear form
+        setFirstName("");
+        setLastName("");
+        setUsername("");
+        setEmail("");
+        setPassword("");
+        setError("");
+
+        // Redirect to home page
+        router.push("/home");
+      }
     } catch (e) {
-      setError(e.message);
-      console.error(e);
+      if (e.message.includes("already exists")) {
+        setError("An account with this email already exists");
+      } else {
+        setError("Error creating account: " + e.message);
+      }
+      console.error("Sign up error:", e);
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleSignUp = async () => {
     try {
       const redirectUrl = `${window.location.origin}/home`;
       await account.createOAuth2Session("google", redirectUrl, redirectUrl);
-
-      const user = await account.get();
-
-      const users = await databases.listDocuments(
-        "your-database-id",
-        "your-collection-id",
-        [Query.equal("email", user.email)]
-      );
-
-      // If user doesn't exist, create new user document
-      if (users.documents.length === 0) {
-        await databases.createDocument(
-          "your-database-id",
-          "your-collection-id",
-          ID.unique(),
-          {
-            email: user.email,
-            name: user.name,
-            username: user.name.toLowerCase().replace(/\s+/g, "_"),
-            oauth_provider: "google",
-          }
-        );
-      }
     } catch (e) {
       console.error("OAuth error:", e);
       setError("Failed to connect with Google");
@@ -79,27 +79,62 @@ export default function SignIn() {
     <div className="Container min-h-screen flex items-center justify-center p-4">
       <div className="cardLogin shadow-lg shadow-gray-900 p-10 rounded-lg w-full max-w-md">
         <div className="header text-center">
-          <h1 className="text-2xl font-normal">Sign in to your account</h1>
+          <h1 className="text-2xl font-normal">Create your account</h1>
           <p className="text-xl text-gray-600">
-            Welcome back! Please enter your details
+            Please enter your details to sign up
           </p>
         </div>
 
         <div className="formInput mt-12 w-full">
-          <form onSubmit={handleLogin}>
+          <form onSubmit={createUser}>
             {error && (
               <div className="text-red-500 text-sm mb-4 text-center">
                 {error}
               </div>
             )}
 
-            <div className="usernameInput flex flex-col">
+            <div className="flex gap-4 w-full">
+              <div className="nameInput flex flex-col flex-1">
+                <h1>First Name</h1>
+                <input
+                  type="text"
+                  placeholder="Enter your first name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  className="outline-1 outline-gray-300 rounded-md mt-2 p-2 ps-3 placeholder-gray-400 text-black hover:outline-gray-800 focus:outline-gray-800 duration-300 w-full"
+                />
+              </div>
+
+              <div className="nameInput flex flex-col flex-1">
+                <h1>Last Name</h1>
+                <input
+                  type="text"
+                  placeholder="Enter your last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="outline-1 outline-gray-300 rounded-md mt-2 p-2 ps-3 placeholder-gray-400 text-black hover:outline-gray-800 focus:outline-gray-800 duration-300 w-full"
+                />
+              </div>
+            </div>
+
+            <div className="usernameInput flex flex-col mt-5">
               <h1>Username</h1>
               <input
                 type="text"
                 placeholder="Enter your username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className="outline-1 outline-gray-300 rounded-md mt-2 ms-2 p-2 ps-3 placeholder-gray-400 text-black hover:outline-gray-800 focus:outline-gray-800 duration-300"
+              />
+            </div>
+
+            <div className="emailInput flex flex-col mt-5">
+              <h1>Email</h1>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="outline-1 outline-gray-300 rounded-md mt-2 ms-2 p-2 ps-3 placeholder-gray-400 text-black hover:outline-gray-800 focus:outline-gray-800 duration-300"
               />
             </div>
@@ -115,34 +150,12 @@ export default function SignIn() {
               />
             </div>
 
-            <div className="underInputSection mt-6 flex justify-between">
-              <div className="checkboxPart flex items-center">
-                <input
-                  type="checkbox"
-                  id="rememberMe"
-                  className="ms-2 cursor-pointer w-5 h-4 "
-                />
-                <label
-                  htmlFor="rememberMe"
-                  className="cursor-pointer text-gray-900 font-normal ms-1"
-                >
-                  Remember me
-                </label>
-              </div>
-
-              <div className="forgotPassword">
-                <Link href="/forget-password" className="font-semibold">
-                  Forgot password?
-                </Link>
-              </div>
-            </div>
-
-            <div className="submitButton flex mt-5 w-full">
+            <div className="submitButton flex mt-8 w-full">
               <button
                 type="submit"
                 className="w-full bg-black text-white h-10 rounded-lg hover:bg-cyan-950 cursor-pointer duration-300"
               >
-                Login
+                Sign up
               </button>
             </div>
 
@@ -158,7 +171,7 @@ export default function SignIn() {
               <div className="loginOption flex justify-center mt-5 gap-x-5">
                 <button
                   type="button"
-                  onClick={handleGoogleLogin}
+                  onClick={handleGoogleSignUp}
                   className="google px-10 border border-gray-300 rounded-lg p-3 hover:bg-gray-400 cursor-pointer duration-300"
                 >
                   <FaGoogle size={20} />
@@ -179,11 +192,11 @@ export default function SignIn() {
                 </button>
               </div>
 
-              <div className="signUpLink text-center mt-5">
+              <div className="signInLink text-center mt-5">
                 <p className="text-gray-600">
-                  Don't have an account?{" "}
-                  <Link href="/signUp" className="font-semibold text-black">
-                    Sign up
+                  Already have an account?{" "}
+                  <Link href="/signIn" className="font-semibold text-black">
+                    Sign in
                   </Link>
                 </p>
               </div>
