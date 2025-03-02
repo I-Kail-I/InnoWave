@@ -1,5 +1,5 @@
 import React from 'react'
-import SignIn from "@/app/signIn/page" 
+import SignIn from "./signIn/page" 
 
 export default function page() {
   return (
