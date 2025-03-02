@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { account, ID } from "@/app/appwrite";
+import { account} from "@/app/appwrite";
 import Link from "next/link";
 import React from "react";
 import { FaGoogle, FaGithub, FaApple } from "react-icons/fa";
