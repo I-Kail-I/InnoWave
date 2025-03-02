@@ -17,7 +17,8 @@ export default function SignIn() {
       setEmail("");
       setPassword("");
       setError("");
-    } catch (e: Error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
       setError(e.message);
       console.error(e);
     }
