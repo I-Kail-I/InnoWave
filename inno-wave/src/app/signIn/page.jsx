@@ -10,15 +10,14 @@ export default function SignIn() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     try {
       await account.createSession(email, password);
       setEmail("");
       setPassword("");
       setError("");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
+    } catch (e) {
       setError(e.message);
       console.error(e);
     }
