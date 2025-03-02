@@ -98,7 +98,7 @@ export default function SignUp() {
                 <h1>First Name</h1>
                 <input
                   type="text"
-                  placeholder="Enter your first name"
+                  placeholder="First name"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   className="outline-1 outline-gray-300 rounded-md mt-2 p-2 ps-3 placeholder-gray-400 text-black hover:outline-gray-800 focus:outline-gray-800 duration-300 w-full"
@@ -109,7 +109,7 @@ export default function SignUp() {
                 <h1>Last Name</h1>
                 <input
                   type="text"
-                  placeholder="Enter your last name"
+                  placeholder="Last name"
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   className="outline-1 outline-gray-300 rounded-md mt-2 p-2 ps-3 placeholder-gray-400 text-black hover:outline-gray-800 focus:outline-gray-800 duration-300 w-full"
