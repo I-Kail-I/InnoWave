@@ -1,32 +1,45 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { IoIosSearch, IoIosSettings } from "react-icons/io";
 import { motion as Motion } from "framer-motion";
+import Link from "next/link";
+import Logo from "../../../public/logo.png"
+import Image from "next/image";
 
 export default function Navbar() {
-  const [navbarAppear, setNavbarAppear] = useState(true);
   const path = usePathname();
+  const [windowWidth, setWindowWidth] = useState(0);
 
-  if (path === "/signIn" || path === "/signUp") {
-    return null;
-  } else {
-    return <TheNavbar />;
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+
+    handleResize(); 
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  if (path === "/signIn" || path === "/signUp" || windowWidth < 768) {
+    return null; 
   }
+
+  return <TheNavbar />;
 }
 
 export function TheNavbar() {
   return (
-    <nav className="navbarContainer w-screen fixed top-0 flex h-15 items-center shadow-md z-50 bg-white">
+    <header className="navbarContainer w-screen fixed top-0 m flex h-15 items-center shadow-md z-50 bg-white">
       <ul className="w-full ms-10 me-15 flex justify-between items-center">
-        <li>
-          <h1
-            className="font-semibold text-2xl"
-            style={{ fontFamily: "inherit" }}
-          >
-            Inno Wave
-          </h1>
+        <li className="">
+          <Link href="/" className="flex justify-center items-center">
+          <Image src={Logo} alt="Logo" width={40}/>
+            <h1
+              className="font-semibold text-lg ms-1"
+              style={{ fontFamily: "unset" }}
+            >
+              Inno Wave
+            </h1>
+          </Link>
         </li>
 
         <li>
@@ -58,6 +71,6 @@ export function TheNavbar() {
           </ul>
         </li>
       </ul>
-    </nav>
+    </header>
   );
 }

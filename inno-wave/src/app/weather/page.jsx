@@ -133,7 +133,7 @@ export default function WeatherDashboard() {
               <Input
                 placeholder="Search for a city..."
                 className="bg-white border-gray-100"
-                type="text"
+                type="search"
                 name="city"
                 value={searchTerm}
                 autoComplete="off"
