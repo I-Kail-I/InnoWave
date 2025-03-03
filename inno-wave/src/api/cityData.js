@@ -1,6 +1,8 @@
+"use server"
+
 export async function getCities() {
   try {
-    const response = await fetch('https://countriesnow.space/api/v0.1/countries');
+    const response = await fetch(process.env.COUNTRY_LIST_API_URL);
     const data = await response.json();
     return data.data; 
   } catch (error) {
