@@ -1,10 +1,9 @@
-import React from 'react'
-import SignIn from "./signIn/page" 
+import Weather from "./weather/page";
 
-export default function page() {
+export default function first() {
   return (
-    <div>
-      <SignIn />
-    </div>
-  )
+    <main>
+      <Weather />
+    </main>
+  );
 }
