@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { motion as Motion } from "framer-motion";
@@ -16,6 +16,7 @@ import {
   Gauge,
 } from "lucide-react";
 import { getWeatherData } from "../../api/weatherData";
+import { getCities } from "../../api/cityData.js";
 
 export default function WeatherDashboard() {
   const [weatherData, setWeatherData] = useState(null);
@@ -23,14 +24,38 @@ export default function WeatherDashboard() {
   const [loading, setLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [cities, setCities] = useState([]);
+  const [loadingCities, setLoadingCities] = useState(false);
 
-  // Add this mock data for testing - replace with real data later
-  const mockCities = [
-    { city: "London", country: "United Kingdom" },
-    { city: "Paris", country: "France" },
-    { city: "Tokyo", country: "Japan" },
-    { city: "New York", country: "United States" },
-  ];
+  useEffect(() => {
+    const fetchCities = async () => {
+      setLoadingCities(true);
+      try {
+        const data = await getCities();
+        // Transform the data into a flat array of cities with their countries
+        const flattenedCities = data.flatMap((country) =>
+          country.cities.map((city) => ({
+            city: city,
+            country: country.country,
+          }))
+        );
+        setCities(flattenedCities);
+      } catch (error) {
+        console.error("Failed to fetch cities:", error);
+      } finally {
+        setLoadingCities(false);
+      }
+    };
+
+    fetchCities();
+  }, []);
+
+  // Filter cities based on search term
+  const filteredCities = cities
+    .filter((item) =>
+      item.city.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice(0, 10); // Limit to 10 results for performance
 
   const handleSearch = async (formData) => {
     try {
@@ -120,21 +145,34 @@ export default function WeatherDashboard() {
               />
               {showDropdown && (
                 <div className="absolute w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 max-h-60 overflow-auto">
-                  {mockCities.map((item, index) => (
-                    <div
-                      key={index}
-                      className="p-2 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
-                      onClick={() => {
-                        setSearchTerm(item.city);
-                        setShowDropdown(false);
-                      }}
-                    >
-                      <h1 className="text-xl font-bold text-gray-900" style={{fontFamily: "monospace"}}>
-                        {item.city}
-                      </h1>
-                      <p className="text-sm text-gray-500">{item.country}</p>
+                  {loadingCities ? (
+                    <div className="p-2 text-sm text-gray-500">
+                      Loading cities...
                     </div>
-                  ))}
+                  ) : filteredCities.length > 0 ? (
+                    filteredCities.map((item, index) => (
+                      <div
+                        key={index}
+                        className="p-2 hover:bg-gray-100 cursor-pointer border-b last:border-b-0"
+                        onClick={() => {
+                          setSearchTerm(item.city);
+                          setShowDropdown(false);
+                        }}
+                      >
+                        <h1
+                          className="text-xl font-bold text-gray-900"
+                          style={{ fontFamily: "monospace" }}
+                        >
+                          {item.city}
+                        </h1>
+                        <p className="text-sm text-gray-500">{item.country}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="p-2 text-sm text-gray-500">
+                      No cities found
+                    </div>
+                  )}
                 </div>
               )}
             </div>
