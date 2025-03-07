@@ -19,7 +19,7 @@ export default function page() {
           Experience weather forecasting like never before
         </p>
 
-        <Link href="/signIn" passHref>
+        <Link href="/weather" passHref>
           <button className="cursor-pointer bg-black text-white rounded-md px-4 py-3 mt-5">
             Start forecasting
           </button>
