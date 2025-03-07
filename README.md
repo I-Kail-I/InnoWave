@@ -1,130 +1,117 @@
-🌊 Inno Wave
+# 🌊 Inno Wave
 
 A sleek and responsive weather application built with Next.js and Tailwind CSS.
 
-🌦️ Features
+## 🌦️ Features
 
-Real-time Weather Updates: Instant weather information at your fingertips
+- **Real-time Weather Updates**: Instant weather information at your fingertips
+- **Accurate Forecasts**: Precision-driven weather predictions for any city
+- **Interactive Maps**: Detailed weather mapping system
+- **Hourly & 5-Day Forecasts**: Plan your day and week with confidence
+- **City Search**: Find weather information for cities worldwide
+- **Responsive Design**: Seamless experience on both desktop and mobile devices
 
-Accurate Forecasts: Precision-driven weather predictions for any city
+## 🛠️ Tech Stack
 
-Interactive Maps: Detailed weather mapping system
+- **Next.js 15.2.0** – React framework with server-side rendering
+- **React 19** – JavaScript library for building user interfaces
+- **Tailwind CSS 4** – Utility-first CSS framework
+- **Framer Motion** – Animation library for React
+- **Lucide React** – Beautiful & consistent icon set
 
-Hourly & 5-Day Forecasts: Plan your day and week with confidence
+## 🚀 Getting Started
 
-City Search: Find weather information for cities worldwide
+### Prerequisites
 
-Responsive Design: Seamless experience on both desktop and mobile devices
+- Node.js (18.x or higher)
+- npm or yarn
 
-🛠️ Tech Stack
+### Installation
 
-Next.js 15.2.0 – React framework with server-side rendering
+1. **Clone the repository:**
 
-React 19 – JavaScript library for building user interfaces
+   ```bash
+   git clone https://github.com/I-Kail-I/inno-wave.git
+   cd inno-wave
+   ```
 
-Tailwind CSS 4 – Utility-first CSS framework
+2. **Install dependencies:**
 
-Framer Motion – Animation library for React
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
 
-Lucide React – Beautiful & consistent icon set
+3. **Set up environment variables:** Creaate a `.env.local` file in the root directory and add your API keys:
 
-🚀 Getting Started
+   ```env
+   OPENWEATHERMAP_API_KEY=your_openweathermap_api_key
+   COUNTRY_LIST_API_URL=your_country_list_api_url
+   ```
 
-Prerequisites
+4. **Run the development server:**
 
-Node.js (18.x or higher)
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
 
-npm or yarn
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-Installation
+## 📱 Application Structure
 
-Clone the repository:
+- **Home Page**: Introduction to Inno Wave's features and user testimonials
+- **Weather Dashboard**: Search cities and view current weather, hourly, and 5-day forecasts
+- **Responsive Navigation**: Mobile-friendly sidebar with smooth animations
 
-git clone https://github.com/I-Kail-I/inno-wave.git
-cd inno-wave
-
-Install dependencies:
-
-npm install
-# or
-yarn install
-
-Set up environment variables:
-Create a .env.local file in the root directory and add your API keys:
-
-OPENWEATHERMAP_API_KEY=your_openweathermap_api_key
-COUNTRY_LIST_API_URL=your_country_list_api_url
-
-Run the development server:
-
-npm run dev
-# or
-yarn dev
-
-Open http://localhost:3000 in your browser.
-
-📱 Application Structure
-
-Home Page: Introduction to Inno Wave's features and user testimonials
-
-Weather Dashboard: Search cities and view current weather, hourly, and 5-day forecasts
-
-Responsive Navigation: Mobile-friendly sidebar with smooth animations
-
-📸 Screenshots
+## 📸 Screenshots
 
 (Add screenshots of your application here)
 
-🧰 Key Components
+## 🧰 Key Components
 
-Responsive Navbar: Includes search functionality
+- **Responsive Navbar**: Includes search functionality
+- **Animated Sidebar**: Smooth animations using Framer Motion
+- **Weather Cards**: Dynamic icons and real-time weather data
+- **City Search**: Autocomplete dropdown for quick city lookup
+- **Detailed Metrics**: Comprehensive weather metrics display
 
-Animated Sidebar: Smooth animations using Framer Motion
-
-Weather Cards: Dynamic icons and real-time weather data
-
-City Search: Autocomplete dropdown for quick city lookup
-
-Detailed Metrics: Comprehensive weather metrics display
-
-🔍 API Integration
+## 🔍 API Integration
 
 This application integrates the following APIs:
 
-OpenWeatherMap API: Provides weather data
+- **OpenWeatherMap API**: Provides weather data
+- **Custom API**: Fetches city information
 
-Custom API: Fetches city information
+## 👨‍💻 Development
 
-👨‍💻 Development
+### Available Scripts
 
-Available Scripts
+- `npm run dev` – Start the development server
+- `npm run build` – Build the application for production
+- `npm run start` – Launch the production server
+- `npm run lint` – Run ESLint for code quality checks
 
-npm run dev – Start the development server
+### Styling
 
-npm run build – Build the application for production
+Utilizes **Tailwind CSS 4** with custom fonts:
 
-npm run start – Launch the production server
+- Palanquin Dark
+- Paytone One
+- Belanosima
+- Platypi
 
-npm run lint – Run ESLint for code quality checks
-
-Styling
-
-Utilizes Tailwind CSS 4 with custom fonts:
-
-Palanquin Dark
-
-Paytone One
-
-Belanosima
-
-Platypi
-
-🤝 Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Feel free to submit a Pull Request.
 
-📝 License
+## 📝 License
 
-This project is licensed under the MIT License – see the LICENSE file for details.
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
 
-👤 About the Developer
+## 👤 About the Developer
+
+Created with passion by **Mikail**.
+
